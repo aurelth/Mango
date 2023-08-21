@@ -1,16 +1,23 @@
+using AutoMapper;
+using Mango.Services.CouponAPI;
 using Mango.Services.CouponAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+//Adding and configuring AutoMapper
+IMapper mapper = MappingConfig.ResgisterMaps().CreateMapper();
+builder.Services.AddSingleton(mapper);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -34,6 +41,7 @@ ApplyMigration();
 
 app.Run();
 
+//Apply Migrations automatically without having to run add-migration in the console
 void ApplyMigration()
 {
     using (var scope = app.Services.CreateScope())
