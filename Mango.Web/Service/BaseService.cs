@@ -72,6 +72,7 @@ namespace Mango.Web.Service
                     Message = ex.Message.ToString(),
                     IsSuccess = false
                 };
+
                 return dto;
             }            
         }
